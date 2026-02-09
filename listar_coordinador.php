@@ -65,7 +65,7 @@ $resultado = $mysqli->query($sql);
                               <td><?php echo $row['Apellido']; ?></td>
                               <td><?php echo $row['Usuario']; ?></td>
                               <td><?php echo $row['Correo']; ?></td>
-                              <td><?php echo $row['Ubicación']; ?></td>
+                              <td><?php echo $row['Ubicacion']; ?></td>
 							  <td><a href="modificar_coordinador.php?cedula=<?php echo $row['cedula']; ?>"><span class="glyphicon glyphicon-pencil"></span></a></td>
 							  <td><a href="#" data-href="eliminar_coordinador.php?cedula=<?php echo $row['cedula']; ?>" data-toggle="modal" data-target="#confirm-delete"><span class="glyphicon glyphicon-trash"></span></a></td>
 						</tr>

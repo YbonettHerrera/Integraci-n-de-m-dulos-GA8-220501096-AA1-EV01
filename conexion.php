@@ -1,9 +1,12 @@
 <?php
-$mysqli = new mysqli('192.168.0.18', 'root', '', 'dblogistica1');
-if ($mysqli->connect_error){
-     die('Error en la conexion' . $mysqli->connect_error);
+// conexion.php
+$mysqli = new mysqli("127.0.0.1", "root", "", "dblogistica1");
+
+if ($mysqli->connect_errno) {
+    die("Error de conexión MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
 }
 
-printf("servidor informacion: %s\n", $mysqli->server_info);
+$mysqli->set_charset("utf8mb4");
 
-?>
+// Se usa para la conexion mysqli_query($conexion, ...)
+$conexion = $mysqli;
