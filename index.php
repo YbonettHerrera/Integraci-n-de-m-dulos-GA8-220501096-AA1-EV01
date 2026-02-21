@@ -18,7 +18,7 @@
 
 <body>
 <div class="container">
-  <h2 class="title">PIKING Y PAKING</h2>
+  <h2 class="title">PICKING Y PACKING</h2>
 
   <ul>
     <li><a href="listar_bodegas.php">BODEGAS</a></li>
