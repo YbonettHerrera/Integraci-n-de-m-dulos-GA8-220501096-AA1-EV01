@@ -1,0 +1,196 @@
+<!-- Chatbot Burbuja - Solística -->
+<style>
+  #cb-launcher{
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,.2);
+    font-size: 22px;
+    background: #0044ff;
+    color: #fff;
+    z-index: 9999;
+  }
+  #cb-panel{
+    position: fixed;
+    bottom: 84px;
+    right: 18px;
+    width: 340px;
+    max-width: calc(100vw - 36px);
+    height: 420px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 12px 28px rgba(0,0,0,.22);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    z-index: 9999;
+  }
+  #cb-header{
+    background: #007bff;
+    color: #fff;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+  }
+  #cb-close{
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  #cb-messages{
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background: #f7f7f7;
+  }
+  .cb-msg{
+    margin: 8px 0;
+    padding: 10px 11px;
+    border-radius: 12px;
+    max-width: 85%;
+    white-space: pre-line;
+    font-size: 14px;
+    line-height: 1.25rem;
+  }
+  .cb-user{
+    margin-left: auto;
+    background: #d1e7ff;
+  }
+  .cb-bot{
+    margin-right: auto;
+    background: #ffffff;
+    border: 1px solid #e6e6e6;
+  }
+  #cb-input{
+    display: flex;
+    border-top: 1px solid #ddd;
+    background: #fff;
+  }
+  #cb-text{
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 12px;
+    font-size: 14px;
+  }
+  #cb-send{
+    border: none;
+    background: #007bff;
+    color: #fff;
+    padding: 12px 14px;
+    cursor: pointer;
+  }
+  #cb-send:hover{ background:#0056b3; }
+  #cb-hints{
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #666;
+    background: #fff;
+    border-top: 1px dashed #eee;
+  }
+</style>
+
+<button id="cb-launcher" aria-label="Abrir chat">💬</button>
+
+<div id="cb-panel" role="region" aria-label="Chatbot Solística">
+  <div id="cb-header">
+    <span>Asistente Solística</span>
+    <button id="cb-close" aria-label="Cerrar chat">✕</button>
+  </div>
+
+  <div id="cb-messages"></div>
+
+  <div id="cb-hints">
+    Prueba: <b>objetivo</b>, <b>tecnologias</b>, <b>integracion</b>, <b>orden</b>, <b>productos</b>
+  </div>
+
+  <div id="cb-input">
+    <input id="cb-text" type="text" placeholder="Escribe tu pregunta..." />
+    <button id="cb-send">Enviar</button>
+  </div>
+</div>
+
+<script>
+  const cbLauncher = document.getElementById('cb-launcher');
+  const cbPanel = document.getElementById('cb-panel');
+  const cbClose = document.getElementById('cb-close');
+  const cbMessages = document.getElementById('cb-messages');
+  const cbText = document.getElementById('cb-text');
+  const cbSend = document.getElementById('cb-send');
+
+  function cbAdd(text, who){
+    const div = document.createElement('div');
+    div.className = 'cb-msg ' + (who === 'user' ? 'cb-user' : 'cb-bot');
+    div.textContent = text;
+    cbMessages.appendChild(div);
+    cbMessages.scrollTop = cbMessages.scrollHeight;
+  }
+
+  function cbResponse(input){
+    const p = input.toLowerCase();
+
+    if (p.includes('hola') || p.includes('buenas')){
+      return "¡Hola! 👋 Soy el asistente de Solística.\nPuedo ayudarte con bodegas, productos, clientes, coordinadores y órdenes.";
+    }
+    if (p.includes('objetivo')){
+      return "El objetivo del proyecto es gestionar bodegas, productos, clientes, coordinadores y órdenes de despacho mediante CRUD e integración de módulos.";
+    }
+    if (p.includes('tecnolog')){
+      return "Tecnologías: PHP + MySQL (XAMPP) para el sistema.\nEste chatbot: HTML + CSS + JavaScript.";
+    }
+    if (p.includes('integracion') || p.includes('integración')){
+      return "La integración se logra relacionando módulos con claves foráneas y consultas JOIN.\nEj: una orden une cliente + coordinador + producto.";
+    }
+    if (p.includes('bodega')){
+      return "BODEGAS: Puedes crear, listar, editar y eliminar bodegas desde el módulo BODEGAS.";
+    }
+    if (p.includes('producto')){
+      return "PRODUCTOS: CRUD con cantidad (stock) y precio, asociado a una bodega.\nTip: primero crea bodegas.";
+    }
+    if (p.includes('cliente')){
+      return "CLIENTES: CRUD de clientes para poder asociarlos a una orden de despacho.";
+    }
+    if (p.includes('coordinador')){
+      return "COORDINADORES: CRUD de coordinadores que se asignan al crear una orden.";
+    }
+    if (p.includes('orden')){
+      return "ORDEN DE DESPACHO:\n1) Entra a ORDEN DE DESPACHO → Nueva orden.\n2) Selecciona cliente, coordinador y producto.\n3) Ingresa cantidad y guarda.\n4) Consulta en LISTAR ÓRDENES (JOIN).";
+    }
+    if (p.includes('salir')){
+      return "¡Listo! Si necesitas algo más, aquí estaré 👋";
+    }
+    return "No tengo esa respuesta todavía 😅.\nPrueba: objetivo, tecnologias, integracion, bodegas, productos, clientes, coordinadores, orden, salir.";
+  }
+
+  function cbToggle(open){
+    cbPanel.style.display = open ? 'flex' : 'none';
+    if(open){ cbText.focus(); }
+  }
+
+  cbLauncher.addEventListener('click', () => cbToggle(cbPanel.style.display !== 'flex'));
+  cbClose.addEventListener('click', () => cbToggle(false));
+
+  function cbSendMsg(){
+    const text = cbText.value.trim();
+    if(!text) return;
+    cbAdd(text, 'user');
+    cbText.value = '';
+    const reply = cbResponse(text);
+    setTimeout(() => cbAdd(reply, 'bot'), 350);
+  }
+
+  cbSend.addEventListener('click', cbSendMsg);
+  cbText.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') cbSendMsg(); });
+
+  // Mensaje inicial
+  cbAdd("Hola 👋 Soy el asistente de Solística.\nEscribe: objetivo, tecnologias, integracion u orden.", 'bot');
+</script>

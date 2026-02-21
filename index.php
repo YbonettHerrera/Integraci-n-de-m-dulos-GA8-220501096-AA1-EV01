@@ -27,9 +27,11 @@
     <li><a href="listar_coordinador.php">COORDINADORES</a></li>
     <li><a href="listar_correos_clientes.php">CORREOS CLIENTES</a></li>
     <li><a href="listar_ordenes.php">ORDEN DE DESPACHO</a></li>
-
-    
   </ul>
 </div>
+
+<!-- Chatbot flotante -->
+<?php include 'chatbot_widget.html'; ?>
+
 </body>
 </html>

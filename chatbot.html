@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chatbot Solística</title>
+  <style>
+
+    <--- Chatboot flotante --->
+    <?php include 'chatbot_witget.html'; ?>
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .header {
+      padding: 12px 15px;
+      background: #007bff;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header a {
+      color: #fff;
+      text-decoration: underline;
+      font-weight: normal;
+      font-size: 13px;
+    }
+    .messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    .message {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 85%;
+      white-space: pre-line;
+    }
+    .user {
+      background-color: #d1e7ff;
+      align-self: flex-end;
+    }
+    .bot {
+      background-color: #e9ecef;
+      align-self: flex-start;
+    }
+    .input-area {
+      display: flex;
+      border-top: 1px solid #ccc;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+    }
+    .input-area button {
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .input-area button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container" role="region" aria-label="Chat con el bot Solística">
+    <div class="header">
+      <span>Asistente Solística</span>
+      <!-- Cambia la ruta si tu inicio es diferente -->
+      <a href="index.php">Volver</a>
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+      <input type="text" id="userInput" aria-label="Escribe tu pregunta"
+        placeholder="Escribe tu pregunta... (Ej: 'crear orden')" />
+      <button onclick="sendMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <script>
+    const messages = document.getElementById("messages");
+
+    function addMessage(text, sender) {
+      const div = document.createElement("div");
+      div.classList.add("message", sender);
+      div.textContent = text;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function botResponse(input) {
+      const p = input.toLowerCase();
+
+      // Saludo
+      if (p.includes("hola") || p.includes("buenas")) {
+        return "¡Hola! 👋 Soy el bot de Solística.\nPuedes preguntarme por: bodegas, productos, clientes, coordinadores u órdenes.\nEj: '¿cómo crear una orden?'";
+      }
+
+      // Objetivo del proyecto (taller lo pide)
+      if (p.includes("objetivo")) {
+        return "El objetivo del proyecto es gestionar bodegas, productos, clientes, coordinadores y órdenes de despacho mediante operaciones CRUD e integración de módulos.";
+      }
+
+      // Tecnologías (taller lo pide)
+      if (p.includes("tecnolog")) {
+        return "Este proyecto usa PHP, MySQL y XAMPP. El chatbot está hecho con HTML, CSS y JavaScript.";
+      }
+
+      // Integración (taller lo pide)
+      if (p.includes("integracion") || p.includes("integración")) {
+        return "La integración consiste en conectar los módulos (clientes, productos y coordinadores) para registrar una orden de despacho usando claves foráneas y consultas JOIN.";
+      }
+
+      // Bodegas
+      if (p.includes("bodega")) {
+        return "MÓDULO BODEGAS:\n- Permite crear, listar, editar y eliminar bodegas.\n- Ruta típica: Bodegas → Nueva bodega / Editar / Eliminar.";
+      }
+
+      // Productos
+      if (p.includes("producto")) {
+        return "MÓDULO PRODUCTOS:\n- CRUD de productos asociados a una bodega.\n- Incluye cantidad (stock) y precio.\nTip: antes de crear productos, crea una bodega.";
+      }
+
+      // Clientes
+      if (p.includes("cliente")) {
+        return "MÓDULO CLIENTES:\n- CRUD de clientes.\n- Se usan para registrar órdenes de despacho.";
+      }
+
+      // Coordinadores
+      if (p.includes("coordinador")) {
+        return "MÓDULO COORDINADORES:\n- CRUD de coordinadores de despacho.\n- Se asignan al crear una orden.";
+      }
+
+      // Órdenes
+      if (p.includes("orden")) {
+        return "ÓRDENES DE DESPACHO:\n1) Entra a Orden de despacho → Nueva orden.\n2) Selecciona cliente, coordinador y producto.\n3) Ingresa cantidad y guarda.\n4) Luego puedes listar órdenes con la info integrada (JOIN).";
+      }
+
+      // Salir (taller lo pide)
+      if (p.includes("salir")) {
+        return "Gracias por conversar conmigo. ¡Éxitos en tu proyecto! 👋";
+      }
+
+      return "Lo siento 😅, aún no tengo respuesta para eso.\nPrueba con: objetivo, tecnologias, integracion, bodegas, productos, clientes, coordinadores, orden, salir.";
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("userInput");
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage(text, "user");
+      input.value = "";
+
+      const respuesta = botResponse(text);
+      setTimeout(() => addMessage(respuesta, "bot"), 400);
+    }
+
+    document.getElementById("userInput").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    // Mensaje inicial
+    addMessage("Hola 👋 Soy el asistente de Solística.\nPregunta por: objetivo, tecnologias, integracion, bodegas, productos, clientes, coordinadores u orden.", "bot");
+  </script>
+</body>
+</html>
